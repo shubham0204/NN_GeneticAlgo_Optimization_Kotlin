@@ -13,13 +13,13 @@
  * limitations under the License.
  */
 
-fun main( args : Array<String> ) {
+fun main() {
 
     // Number of generations to be evolved
-    val numGenerations = 4
+    val numGenerations = 10
     // Number of individuals in each population. In our case, this is the number of networks
     // which will be trained for 1 iteration so as to get the loss incurred by each NN.
-    val population = 2
+    val population = 20
 
     val paramChoices = HashMap<String,FloatArray>()
     paramChoices[ "numLayers" ] = floatArrayOf( 2f , 3f , 4f )

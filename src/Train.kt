@@ -18,26 +18,30 @@ import NeuralNetwork.Dense
 import NeuralNetwork.MatrixOps
 import NeuralNetwork.Model
 
-
-
+// The class which trains the NN and stores the fitness score.
 class Train {
 
+    // NN Model
     private lateinit var model : Model
+
+    // Inputs given to the NN
     private val inputs = MatrixOps.uniform( 1 , 3 )
+
+    // Labels for the given input
     private val outputs = MatrixOps.uniform( 1 , 2 )
+
+    // Number of epochs to train for
     private val numEpochs : Int = 1
-    private var outputDims : Int = 0
 
-    init {
+    // Input/Output dimensions
+    private val inputDims : Int = 3
+    private var outputDims : Int = 2
 
-    }
-
-    private fun compileModel( networkParams : HashMap<String,Float> , inputDims : Int , outputDims : Int ) {
+    // Compile the model with given hyperparameters.
+    private fun compileModel( networkParams : HashMap<String,Float> ) {
         val numLayers = networkParams[ "numLayers" ]!!
         val numNeurons = networkParams[ "numNeurons" ]!!
         val learningRate = networkParams[ "learningRates" ]!!
-
-        this.outputDims = outputDims
 
         val layers = ArrayList<Dense>()
         for ( i in 0 until numLayers.toInt() ) {
@@ -49,8 +53,10 @@ class Train {
         model.compile()
     }
 
+    // Train a member ( neural network ) for a given number of epochs.
+    // Return the fitness score which is ( 5 / loss )
     fun trainAndScore( networkParams : HashMap<String,Float> ) : Float {
-        compileModel( networkParams , 3 , 2 )
+        compileModel( networkParams )
         for (i in 0 until numEpochs ) {
             println( "Training this individual for ${i+1} epochs")
             model.forward(inputs, outputs)

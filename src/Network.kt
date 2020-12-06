@@ -13,24 +13,32 @@
  * limitations under the License.
  */
 
-
+// Helper class for handling interactions with the Neural Network
 class Network() {
 
+    // The fitness score for this network
     var score = 0.0f
+
+    // The network parameters ( hyperparameters ) for this NN
     var networkParams = HashMap<String,Float>()
+
+    // Choices available for the hyperparameter
     var paramChoices = HashMap<String,FloatArray>()
+
+    // NN trainer
     private var trainer : Train = Train()
 
+    // Initialize this NN with random hyperparameters
     fun initializeNNWithRandomParams() {
         for ( key in paramChoices.keys ) {
             networkParams[ key ] = (paramChoices[ key ] as FloatArray).random()
         }
     }
 
+    // Train this NN and store the fitness score
     fun train() {
         val score = trainer.trainAndScore( networkParams )
         this.score = score
-
     }
 
 }

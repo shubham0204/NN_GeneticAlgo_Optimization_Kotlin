@@ -81,6 +81,7 @@ class Optimizer(
         return child
     }
 
+    // Get the average fitness score of all members in the given population.
     fun getAvgScore(population : ArrayList<Network> ) : Float {
         val summation = population.map { network -> network.score }.toFloatArray().sum()
         return summation / population.size
@@ -101,32 +102,41 @@ class Optimizer(
             }
         }
 
+        // Create an array ( of length (total_individuals - selected_parents) ) to store children.
         val parentsLength = parents.size
         val desiredLength = currentPopulation.size - parentsLength
         val children = ArrayList<Network>()
 
         while( children.size < desiredLength ) {
 
+            // Select any two parents
             val male = Random().nextInt( parents.size )
             val female = Random().nextInt( parents.size )
 
+            // Check if they are different from each other
             if ( male != female ){
                 val maleParent = parents[ male ]
                 val femaleParent = parents[ female ]
+                // breeding
                 val babies = breed( maleParent , femaleParent )
+                // Append the babies to the arraylist
                 for ( baby in babies ){
                     children.add( baby )
                     println( "Adding children")
                 }
             }
+            else {
+                println( "Equal" )
+            }
+
         }
 
         println( "Loop completed" )
 
         println( "currentPopulatin ${currentPopulation.size} " )
-        println( "parents ${parents.size } " )
         println( "children ${children.size}")
         parents.addAll( children )
+        println( "parents ${parents.size } " )
         return parents
     }
 
