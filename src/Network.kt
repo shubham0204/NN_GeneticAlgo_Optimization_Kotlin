@@ -41,4 +41,8 @@ class Network() {
         this.score = score
     }
 
+    override fun toString(): String {
+        return networkParams.toString()
+    }
+
 }

@@ -29,7 +29,7 @@ fun main() {
     // Create an optimizer.
     val optimizer = Optimizer( paramChoices )
     // Create a population with NNs consisting of randomly chosen parameters.
-    val individuals = optimizer.createPopulation( population )
+    var individuals = optimizer.createPopulation( population )
 
     for ( i in 0 until numGenerations ){
         println( "Evolve $i")
@@ -40,7 +40,7 @@ fun main() {
         val avgScore = optimizer.getAvgScore( individuals )
         if ( i != numGenerations - 1 ){
             println( "Evolving this")
-            optimizer.evolve( individuals )
+            individuals = optimizer.evolve( individuals )
         }
 
         println( "Evolution of $i done")
@@ -51,6 +51,7 @@ fun main() {
     individuals.sortBy{ network -> network.score }
     individuals.reverse()
 
-    individuals.forEach { network -> println( network.score ) }
+    val network = individuals[ 0 ]
+    println( network.toString() )
 
 }

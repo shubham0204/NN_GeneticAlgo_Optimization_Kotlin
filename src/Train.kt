@@ -30,8 +30,8 @@ class Train {
     // Labels for the given input
     private val outputs = MatrixOps.uniform( 1 , 2 )
 
-    // Number of epochs to train for
-    private val numEpochs : Int = 1
+    // Number of iterations to train for
+    private val numIterations : Int = 1
 
     // Input/Output dimensions
     private val inputDims : Int = 3
@@ -42,7 +42,7 @@ class Train {
         val numLayers = networkParams[ "numLayers" ]!!
         val numNeurons = networkParams[ "numNeurons" ]!!
         val learningRate = networkParams[ "learningRates" ]!!
-
+        // Add required number layers and neurons in each
         val layers = ArrayList<Dense>()
         for ( i in 0 until numLayers.toInt() ) {
             layers.add( Dense( numNeurons.toInt() , ActivationOps.ReLU() , false ) )
@@ -57,7 +57,7 @@ class Train {
     // Return the fitness score which is ( 5 / loss )
     fun trainAndScore( networkParams : HashMap<String,Float> ) : Float {
         compileModel( networkParams )
-        for (i in 0 until numEpochs ) {
+        for (i in 0 until numIterations ) {
             println( "Training this individual for ${i+1} epochs")
             model.forward(inputs, outputs)
             model.backward()

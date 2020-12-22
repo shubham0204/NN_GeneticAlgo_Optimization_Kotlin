@@ -57,9 +57,9 @@ class Optimizer(
         for( i in 0 until 2 ) {
             // Create parameters for the child NN
             val childParams = HashMap<String,Float>()
-            for ( name in paramChoices.keys ){
-                childParams[ name ] = arrayOf(
-                        mother.networkParams[ name ] , father.networkParams[ name ] ).random() as Float
+            for ( param in paramChoices.keys ){
+                childParams[ param ] = arrayOf(
+                        mother.networkParams[ param ] , father.networkParams[ param ] ).random() as Float
             }
             var child = Network()
             child.networkParams = childParams
@@ -88,24 +88,28 @@ class Optimizer(
     }
 
     fun evolve( currentPopulation : ArrayList<Network> ) : ArrayList<Network> {
-        // Get the fitness scores of all individuals in this population
-        var fitnessScores = currentPopulation.map{ individual -> getFitnessScore( individual ) }
-        // Sort them in descending order
-        fitnessScores = fitnessScores.sortedDescending()
+        // Get the fitness scores of all individuals in this population and sort them.
+        val populationSorted = currentPopulation.sortedWith( kotlin.Comparator {
+            o1, o2 -> o2.score.compareTo( o1.score )  })
+        println( "Initial population size ${populationSorted.size}")
         // Select top K individuals ( which have the highest fitness score ) from this population
         val retainLength = ( currentPopulation.size * retain ).toInt()
-        val parents = ArrayList( currentPopulation.slice( 0..retainLength ) )
+        val parents = ArrayList( populationSorted.slice( 0..retainLength ) )
+        println( "Population size after selecting K individuals ${parents.size}")
         // Add some more individuals ( the ones filtered above )
         for ( unwantedParent in currentPopulation.subList( retainLength , currentPopulation.size ) ) {
             if ( randomSelect > Random().nextFloat() ) {
                 parents.add( unwantedParent )
             }
         }
+        println( "Population size after adding some more parents ${parents.size}")
 
         // Create an array ( of length (total_individuals - selected_parents) ) to store children.
         val parentsLength = parents.size
         val desiredLength = currentPopulation.size - parentsLength
         val children = ArrayList<Network>()
+
+        println( "Desired length ${desiredLength}")
 
         while( children.size < desiredLength ) {
 
@@ -120,23 +124,19 @@ class Optimizer(
                 // breeding
                 val babies = breed( maleParent , femaleParent )
                 // Append the babies to the arraylist
-                for ( baby in babies ){
-                    children.add( baby )
-                    println( "Adding children")
-                }
-            }
-            else {
-                println( "Equal" )
+                children.addAll( babies )
             }
 
         }
 
-        println( "Loop completed" )
+        println( "children Size ${children.size} " )
 
-        println( "currentPopulatin ${currentPopulation.size} " )
-        println( "children ${children.size}")
+  /*      println( "retainLength Size ${desiredLength}} " )
+        println( "children ${children.size}")*/
+
         parents.addAll( children )
-        println( "parents ${parents.size } " )
+
+        println( "new generation ${parents.size } " )
         return parents
     }
 
