@@ -25,6 +25,6 @@ optimization to it, all in your favourite Kotlin.
 
 > Individuals who love linear algebra, matrics, partial
 > derivatives and other weird stuff are warned. This 
-> repo has no math for you guys, but biology we that learnt in early classes
+> repo has no math for you guys, but biology we learnt in our early classes
 
 
